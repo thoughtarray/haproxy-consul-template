@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv sh
+
+# Sleep till haproxy is up or timeout
+TIMEOUT=5
+while [ $TIMEOUT -gt 0 ]; do
+  TIMEOUT=$((TIMEOUT - 1))
+  if [ $(s6-svstat /var/run/s6/services/haproxy-a | egrep -o '^up') ]; then
+    exec consul-template \
+      -consul "${CONSUL_ADDR}:${CONSUL_PORT}" \
+      -config "$CONSUL_TEMPLATE_CONFIG"
+  fi
+
+  sleep 1
+done

@@ -1,0 +1,25 @@
+#!/bin/sh
+set -o nounset
+set -o errexit
+
+# Check config
+haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg
+
+if [ $? -ne 0 ]; then
+  exit 99
+fi
+
+# Determine running instance
+A_STATUS=$(s6-svstat /var/run/s6/services/haproxy-a | egrep -o '^up|^down')
+B_STATUS=$(s6-svstat /var/run/s6/services/haproxy-b | egrep -o '^up|^down')
+
+if [ $A_STATUS = 'up' -a $B_STATUS = 'up' ]; then
+  echo 'Both up, error'
+  exit 1
+elif [ $A_STATUS = 'up' ]; then
+  echo 'A up, activating b'
+  s6-svc -o /var/run/s6/services/haproxy-b
+else
+  echo 'Else, activationg a'
+  s6-svc -o /var/run/s6/services/haproxy-a
+fi
