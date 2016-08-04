@@ -18,7 +18,7 @@ Another component that you may be interested in customizing is the Consul Templa
 ### Example
 ```sh
 docker run --name service-proxy -p 80:80 -p 443:443 \
-  -e "CONSUL_ADDR=[ip/hostname of Consul (hopefully local client)]" \
+  -e "CONSUL_ADDR=<ip/host of Consul>" \
   -e "CONSUL_PORT=8500" \
   -v "/path/on/host:/usr/local/etc/consul-template/templates/haproxy.ctmpl:ro" \
   haproxy-consul-template
@@ -52,7 +52,7 @@ docker run -d --name consul -p 8500:8500 \
 # ^ UI accessible at http://localhost:8500/ui/
 
 # Build KV tree on test Consul
-./example/populate_consul.sh "localhost:8500"
+./example/populate_consul.sh "<ip/host of Consul>"
 
 # Start test app
 docker run --name test-app -d -p 5000:5000 alpine sh \
@@ -60,7 +60,7 @@ docker run --name test-app -d -p 5000:5000 alpine sh \
 
 # Start service proxy
 docker run -d --name service-proxy -p 80:80 -p 1936:1936 \
-  -e "CONSUL_ADDR=$(ipconfig getifaddr en0)" \
+  -e "CONSUL_ADDR=<ip/host of Consul>" \
   -v "$(pwd)/example/haproxy.example.ctmpl:/usr/local/etc/consul-template/templates/haproxy.ctmpl:ro" \
   haproxy-consul-template
 
@@ -86,4 +86,4 @@ docker kill service-proxy test-app consul \
 
 ## Known issues
 * Docker for Mac (or maybe OSX) is a load-testing bottleneck?
-* Sometimes Consul Template's reload commands out-pace Nginx's reloading speed (might be related to lingering connections in old worker thread)
+* Sometimes Consul Template's reload commands out-pace HAProxy's reloading speed (might be related to lingering connections in old instance)
