@@ -1,4 +1,0 @@
-#!/usr/bin/with-contenv sh
-
-s6-svc -O /var/run/s6/services/haproxy-b
-exec haproxy -f /usr/local/etc/haproxy/haproxy.cfg -sf $(s6-svstat /var/run/s6/services/haproxy-a | egrep -o "pid \d+" | egrep -o "\d+")

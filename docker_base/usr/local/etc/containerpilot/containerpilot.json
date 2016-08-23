@@ -1,0 +1,27 @@
+{
+  "consul": "consul:8500",
+  "preStart": "preStart.sh",
+  "logging": {
+    "level": "INFO",
+    "format": "default",
+    "output": "stdout"
+  },
+  "stopTimeout": 5,
+  "preStop": "preStop.sh",
+  "postStop": "postStop.sh",
+  "services": null,
+  "backends": null,
+  "telemetry": null,
+  "tasks": [ ],
+  "coprocesses": [
+    {
+      "name": "consul-template",
+      "command": [
+        "consul-template",
+        "-consul", "{{.CONSUL_ADDR}}:{{.CONSUL_PORT}}",
+        "-config", "/usr/local/etc/consul-template/consul-template.conf"
+      ],
+      "restarts": "unlimited"
+    }
+  ]
+}

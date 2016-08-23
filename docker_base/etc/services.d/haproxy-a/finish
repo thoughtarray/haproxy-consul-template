@@ -1,3 +1,0 @@
-#!/usr/bin/with-contenv sh
-
-# TODO: maybe add checks for bad HAProxy exits (like due to bad error)
