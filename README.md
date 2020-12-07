@@ -38,7 +38,7 @@ docker exec -ti haproxy-consul-template ash
 # You are now in the container
 less /usr/local/etc/haproxy/haproxy.cfg
 
-# If the OS bitches at you and less doesn't work, do this and try again:
+# If the OS complains at you and less doesn't work, do this and try again:
 export TERM=xterm
 ```
 
